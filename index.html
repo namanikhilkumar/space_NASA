@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NASA Space Photo of the Day</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0d1b2a;
+      color: #ffffff;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #ffcc00;
+    }
+    .container {
+      margin-top: 30px;
+    }
+    img, iframe {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+    .explanation {
+      text-align: justify;
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #1b263b;
+      padding: 20px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚀 NASA's Astronomy Picture of the Day</h1>
+  <div class="container" id="apod">
+    Loading...
+  </div>
+
+  <script>
+    const apiKey = "DEMO_KEY"; // Replace with your own key for higher limits
+    const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("apod");
+        let mediaContent = "";
+
+        if (data.media_type === "image") {
+          mediaContent = `<img src="${data.url}" alt="Astronomy Image"/>`;
+        } else if (data.media_type === "video") {
+          mediaContent = `<iframe src="${data.url}" frameborder="0" allowfullscreen></iframe>`;
+        }
+
+        container.innerHTML = `
+          <h2>${data.title}</h2>
+          <p><em>${data.date}</em></p>
+          ${mediaContent}
+          <div class="explanation">${data.explanation}</div>
+        `;
+      })
+      .catch(error => {
+        document.getElementById("apod").innerHTML = `<p style="color:red;">Error loading data: ${error.message}</p>`;
+      });
+  </script>
+
+</body>
+</html>
